@@ -2,6 +2,8 @@
 
 Additional function has been added to the LoraPacket.ts module to export the packet as an object.
 
+**Below is the original README.md**
+
 ---------------------------------------------------------------------
 
 # lora-packet
