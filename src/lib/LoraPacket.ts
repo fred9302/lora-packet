@@ -888,6 +888,119 @@ class LoraPacket {
     return msg;
   }
 
+  // Homemade function to export packet as object
+  public toObject(): any {
+    let res: object = {};
+
+    if (this.isJoinRequestMessage()) {
+      res = {
+        MType: "Join Request",
+        PHYPayload: asHexString(this.PHYPayload).toUpperCase(),
+        MHDR: asHexString(this.MHDR),
+        MACPayload: asHexString(this.MACPayload),
+        MIC: asHexString(this.MIC),
+        RejoinType: this.RejoinType,
+        AppEUI: asHexString(this.AppEUI),
+        DevEUI: asHexString(this.DevEUI),
+        DevNonce: asHexString(tis.DevNonce),
+      };
+    } else if (this.isJoinAcceptMessage()) {
+      if (this.CFList.lenght === 16) {
+        res = {
+          MType: "Join Accept",
+          PHYPayload: asHexString(this.PHYPayload).toUpperCase(),
+          MHDR: asHexString(this.MHDR),
+          MACPayload: asHexString(this.MACPayload),
+          MIC: asHexString(this.MIC),
+          AppNonce: asHexString(this.AppNonce),
+          NetID: asHexString(this.NetID),
+          DevAddr: asHexString(this.DevAddr),
+          DLSettings: asHexString(this.DLSettings),
+          RxDelay: asHexString(this.RxDelay),
+          CFList: asHexString(this.CFList),
+          DLSettingsRX1DRoffset: this.getDLSettingsRxOneDRoffset(),
+          DLSettingsRX2DataRate: this.getDLSettingsRxTwoDataRate(),
+          RxDelayDel: this.getRxDelayDel(),
+
+          FreqCh4: asHexString(this.getCFListFreqChFour()),
+          FreqCh5: asHexString(this.getCFListFreqChFive()),
+          FreqCh6: asHexString(this.getCFListFreqChSix()),
+          FreqCh7: asHexString(this.getCFListFreqChSeven()),
+          FreqCh8: asHexString(this.getCFListFreqChEight())
+        }
+      } else {
+        res = {
+          MType: "Join Accept",
+          PHYPayload: asHexString(this.PHYPayload).toUpperCase(),
+          MHDR: asHexString(this.MHDR),
+          MACPayload: asHexString(this.MACPayload),
+          MIC: asHexString(this.MIC),
+          AppNonce: asHexString(this.AppNonce),
+          NetID: asHexString(this.NetID),
+          DevAddr: asHexString(this.DevAddr),
+          DLSettings: asHexString(this.DLSettings),
+          RxDelay: asHexString(this.RxDelay),
+          CFList: asHexString(this.CFList),
+          DLSettingsRX1DRoffset: this.getDLSettingsRxOneDRoffset(),
+          DLSettingsRX2DataRate: this.getDLSettingsRxTwoDataRate(),
+          RxDelayDel: this.getRxDelayDel()
+        }
+      }
+    } else if (this.isRejoinRequestMessage()) {
+      res = {
+        MType: 'ReJoin Request',
+        PHYPayload: asHexString(this.PHYPayload).toUpperCase(),
+        MHDR: asHexString(this.MHDR),
+        MACPayload: asHexString(this.MACPayload),
+        MIC: asHexString(this.MIC)
+      };
+      if (this.RejoinType[0] === 0 || this.RejoinType[0] === 2) {
+        Object.assign(res, {
+          RejoinType: asHexString(this.RejoinType),
+          NetID: asHexString(this.NetID),
+          DevEUI: asHexString(this.DevEUI),
+          RJCount0: asHexString(this.RJCount0)
+        })
+      } else if (this.RejoinType[0] === 1) {
+        Object.assign(res, {
+          RejoinType: asHexString(this.RejoinType),
+          JoinEUI: asHexString(this.JoinEUI),
+          DevEUI: asHexString(this.DevEUI),
+          RJCount0: asHexString(this.RJCount0)
+        })
+      }
+    } else if (this.isDataMessage()) {
+      res = {
+        MType: this.getMType(),
+        PHYPayload: asHexString(this.PHYPayload).toUpperCase(),
+        MHDR: asHexString(this.MHDR),
+        MACPayload: asHexString(this.MACPayload),
+        MIC: asHexString(this.MIC),
+        FHDR: asHexString(this.FHDR),
+        FPort: asHexString(this.FPort),
+        FRMPayload: asHexString(this.FRMPayload),
+        DevAddr: asHexString(this.DevAddr),
+        FCtrl: asHexString(this.FCtrl),
+        FCntHex: asHexString(this.FCnt),
+        FOpts: asHexString(this.FOpts),
+        Direction: this.getDir(),
+        FCountUInt16: this.getFCnt(),
+        FCtrlACK: this.getFCtrlACK(),
+        FCtrlADR: this.getFCtrlADR()
+      };
+      if (this._getMType() == MType.CONFIRMED_DATA_DOWN || this._getMType() == MType.UNCONFIRMED_DATA_DOWN) {
+        Object.assign(res, {
+          FCtrlFPending: this.getFCtrlFPending()
+        })
+      } else {
+        Object.assign(res, {
+          FCtrlADRACKReq: this.getFCtrlADRACKReq()
+        })
+      }
+    }
+    return res;
+  }
+
   get JoinEUI(): Buffer {
     return this.AppEUI;
   }
