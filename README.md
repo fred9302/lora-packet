@@ -1,3 +1,9 @@
+# Fork of lora-packet
+
+Additional function has been added to the LoraPacket.ts module to export the packet as an object.
+
+---------------------------------------------------------------------
+
 # lora-packet
 
 A pure [node.js](http://nodejs.org/) library to decode and encode packets
