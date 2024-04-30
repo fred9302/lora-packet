@@ -6,7 +6,6 @@ npm-debug.log
 pnpm-lock.yaml
 .tern-port
 .vscode
-out/
 .eslintcache
 .npm
 *.tsbuildinfo
