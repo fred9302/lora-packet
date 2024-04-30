@@ -116,7 +116,7 @@ declare class LoraPacket {
     isReJoinRequestMessage(): boolean;
     isJoinAcceptMessage(): boolean;
     toString(): string;
-    toObject(): any;
+    toObject(): object;
     get JoinEUI(): Buffer;
     set JoinEUI(v: Buffer);
     get JoinNonce(): Buffer;
