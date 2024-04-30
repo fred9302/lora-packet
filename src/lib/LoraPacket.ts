@@ -685,7 +685,7 @@ class LoraPacket {
    */
   public getCFListFreqChFour(): Buffer {
     if (this.CFList && this.CFList.length === 16) {
-      return reverseBuffer(this.CFList.slice(0, 0 + 3));
+      return reverseBuffer(this.CFList.slice(0, /*0 +*/ 3));
     } else {
       return Buffer.alloc(0);
     }
@@ -902,10 +902,10 @@ class LoraPacket {
         RejoinType: this.RejoinType,
         AppEUI: asHexString(this.AppEUI),
         DevEUI: asHexString(this.DevEUI),
-        DevNonce: asHexString(tis.DevNonce),
+        DevNonce: asHexString(this.DevNonce),
       };
     } else if (this.isJoinAcceptMessage()) {
-      if (this.CFList.lenght === 16) {
+      if (this.CFList.length === 16) {
         res = {
           MType: "Join Accept",
           PHYPayload: asHexString(this.PHYPayload).toUpperCase(),
@@ -926,8 +926,8 @@ class LoraPacket {
           FreqCh5: asHexString(this.getCFListFreqChFive()),
           FreqCh6: asHexString(this.getCFListFreqChSix()),
           FreqCh7: asHexString(this.getCFListFreqChSeven()),
-          FreqCh8: asHexString(this.getCFListFreqChEight())
-        }
+          FreqCh8: asHexString(this.getCFListFreqChEight()),
+        };
       } else {
         res = {
           MType: "Join Accept",
@@ -943,31 +943,31 @@ class LoraPacket {
           CFList: asHexString(this.CFList),
           DLSettingsRX1DRoffset: this.getDLSettingsRxOneDRoffset(),
           DLSettingsRX2DataRate: this.getDLSettingsRxTwoDataRate(),
-          RxDelayDel: this.getRxDelayDel()
-        }
+          RxDelayDel: this.getRxDelayDel(),
+        };
       }
     } else if (this.isRejoinRequestMessage()) {
       res = {
-        MType: 'ReJoin Request',
+        MType: "ReJoin Request",
         PHYPayload: asHexString(this.PHYPayload).toUpperCase(),
         MHDR: asHexString(this.MHDR),
         MACPayload: asHexString(this.MACPayload),
-        MIC: asHexString(this.MIC)
+        MIC: asHexString(this.MIC),
       };
       if (this.RejoinType[0] === 0 || this.RejoinType[0] === 2) {
         Object.assign(res, {
           RejoinType: asHexString(this.RejoinType),
           NetID: asHexString(this.NetID),
           DevEUI: asHexString(this.DevEUI),
-          RJCount0: asHexString(this.RJCount0)
-        })
+          RJCount0: asHexString(this.RJCount0),
+        });
       } else if (this.RejoinType[0] === 1) {
         Object.assign(res, {
           RejoinType: asHexString(this.RejoinType),
           JoinEUI: asHexString(this.JoinEUI),
           DevEUI: asHexString(this.DevEUI),
-          RJCount0: asHexString(this.RJCount0)
-        })
+          RJCount0: asHexString(this.RJCount0),
+        });
       }
     } else if (this.isDataMessage()) {
       res = {
@@ -986,16 +986,16 @@ class LoraPacket {
         Direction: this.getDir(),
         FCountUInt16: this.getFCnt(),
         FCtrlACK: this.getFCtrlACK(),
-        FCtrlADR: this.getFCtrlADR()
+        FCtrlADR: this.getFCtrlADR(),
       };
       if (this._getMType() == MType.CONFIRMED_DATA_DOWN || this._getMType() == MType.UNCONFIRMED_DATA_DOWN) {
         Object.assign(res, {
-          FCtrlFPending: this.getFCtrlFPending()
-        })
+          FCtrlFPending: this.getFCtrlFPending(),
+        });
       } else {
         Object.assign(res, {
-          FCtrlADRACKReq: this.getFCtrlADRACKReq()
-        })
+          FCtrlADRACKReq: this.getFCtrlADRACKReq(),
+        });
       }
     }
     return res;
