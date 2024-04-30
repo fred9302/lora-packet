@@ -20,7 +20,10 @@ jobs:
 
     - name: Build
       run: |
+        npm ci
         npm run linter
         npm install
         npm test
         npm run build
+      env:
+        CI: true
