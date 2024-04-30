@@ -889,7 +889,7 @@ class LoraPacket {
   }
 
   // Homemade function to export packet as object
-  public toObject(): any {
+  public toObject(): object {
     let res: object = {};
 
     if (this.isJoinRequestMessage()) {
