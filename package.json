@@ -23,7 +23,6 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "test": "./node_modules/.bin/jest",
-    "prepublishOnly": "rm -rf ./out; ./node_modules/.bin/eslint .; ./node_modules/.bin/tsc",
     "linter": "./node_modules/.bin/eslint ."
   },
   "bin": {
