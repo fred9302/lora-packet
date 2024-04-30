@@ -685,7 +685,7 @@ class LoraPacket {
    */
   public getCFListFreqChFour(): Buffer {
     if (this.CFList && this.CFList.length === 16) {
-      return reverseBuffer(this.CFList.slice(0, /*0 +*/ 3));
+      return reverseBuffer(this.CFList.slice(0, /* 0 + */ 3));
     } else {
       return Buffer.alloc(0);
     }
